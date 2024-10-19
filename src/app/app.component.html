@@ -1,0 +1,53 @@
+<header class="p-4 shadow-lg bg-white fixed w-full top-0 left-0 z-50">
+  <div class="container mx-auto">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <img src="PCI1.png" alt="PCI Tecnología" class="h-10">
+      </div>
+      <div class="flex-grow mx-8 flex items-center">
+        <div class="flex items-center border border-gray-300 rounded-md overflow-hidden w-full">
+          <input type="text" placeholder="¿Qué producto buscas el día de hoy?"
+            class="w-full px-4 py-2 focus:outline-none text-sm" />
+          <button class="bg-pci-blue hover:bg-pci-blue text-white px-4 py-2">
+            Buscar
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center space-x-6">
+        <a href="#" class="relative">
+          <img src="shopping.svg" alt="Carrito" class="h-10 w-10">
+          <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2">
+            0
+          </span>
+        </a>
+        <a href="#">
+          <img src="profile.svg" alt="Usuario" class="h-10 w-10">
+        </a>
+      </div>
+    </div>
+    <nav class="flex justify-center space-x-8 mt-2">
+      <a routerLink="/login" class="text-pci-blue hover:text-color3 font-medium">Login</a>
+    </nav>
+  </div>
+</header>
+<div class="container mx-auto mt-20">
+  <router-outlet></router-outlet>
+</div>
+<footer class="bg-white shadow-lg p-6 mt-10">
+  <div class="container mx-auto">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center space-x-4">
+        <img src="PCI1.png" alt="PCI Tecnología" class="h-8">
+        <p class="text-gray-600 text-sm">&copy; 2024 PCI Tecnología. Todos los derechos reservados.</p>
+      </div>
+      <div class="flex space-x-4">
+        <a href="#" class="text-gray-600 hover:text-pci-blue">Términos de Servicio</a>
+        <a href="#" class="text-gray-600 hover:text-pci-blue">Política de Privacidad</a>
+        <a href="#" class="text-gray-600 hover:text-pci-blue">Contacto</a>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <p class="text-gray-500 text-xs">Desarrollado por PCI Tecnología</p>
+    </div>
+  </div>
+</footer>
