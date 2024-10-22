@@ -1,3 +1,71 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Estilos globales (modo claro por defecto) */
+body {
+    font-family: 'Arial', 'Calibri', sans-serif;
+    background-color: #ffffff;
+    color: #1e1e1e;
+  }
+  
+  /* Estilos del modo oscuro */
+  body.dark-mode {
+    background-color: #1e1e1e;
+  }
+  
+  /* Puedes ajustar los colores de otros elementos según el modo oscuro */
+  header {
+    background-color: #ffffff;
+  }
+  
+  header.dark-mode {
+    background-color: #1e1e1e;
+  }
+  
+footer {
+    background-color: #ffffff;
+    color: #1e1e1e;
+  }
+  
+  body.dark-mode footer {
+    background-color: #1e1e1e; /* Fondo oscuro */
+    color: #f1f1f1; /* Texto claro */
+  }
+  
+  /* Ajustar enlaces del footer */
+  body.dark-mode footer a {
+    color: #f1f1f1;
+  }
+  body.dark-mode footer p {
+    color: #f1f1f1;
+  }
+  
+  
+  body.dark-mode footer a:hover {
+    color: #00cfff; 
+  }
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+  background-color: #ffffff;
+  color: black;
+}
+
+/* Estilo para form en modo oscuro */
+body.dark-mode form {
+    background-color: #1e1e1e; /* Fondo oscuro */
+    color: #ffffff; 
+  }
+  body.dark-mode div {
+    background-color: #1e1e1e; /* Fondo oscuro */
+    color: #ffffff; /* Texto claro */
+  }
+
+  body.dark-mode header {
+    background-color: #1e1e1e; /* Fondo oscuro para el header */
+  }
+/* Invertir colores de la imagen en modo oscuro */
+.invert-logo {
+  filter: invert(1) hue-rotate(180deg);
+}

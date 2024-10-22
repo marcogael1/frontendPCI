@@ -14,7 +14,7 @@ export class UserTypeGuard implements CanActivate {
     if (userType === 'admin') {
       return true;
     } else {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
       return false;
     }
   }

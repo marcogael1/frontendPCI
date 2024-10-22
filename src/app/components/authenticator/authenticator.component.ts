@@ -40,7 +40,7 @@ export class MfaComponent {
         duration: 3000,
         backgroundColor: '#FF0000',
       }).showToast();
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
     }
   }
 

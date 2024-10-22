@@ -1,0 +1,20 @@
+<div class="flex justify-center items-center min-h-screen">
+  <div class="w-full max-w-md bg-white rounded-lg" [ngStyle]="{'border': 'none', 'height': '590px'}">
+    <div class="flex justify-around ">
+      <button routerLink="/auth/login" routerLinkActive="bg-pci-blue text-white"
+        class="px-4 py-2 font-bold rounded focus:outline-none focus:ring-2">
+        Iniciar Sesión
+      </button>
+      <button routerLink="/auth/register" routerLinkActive="bg-pci-blue text-white"
+        class="px-4 py-2 font-bold rounded focus:outline-none focus:ring-2">
+        Registrarse
+      </button>
+    </div>
+
+    <router-outlet></router-outlet>
+  </div>
+
+  <div class="hidden md:flex w-1/2 h-full items-stretch bg-cover bg-center rounded-lg shadow-lg"
+       [ngStyle]="{'background-image': 'url(https://img.freepik.com/foto-gratis/vista-configuracion-controlador-teclado-juegos-neon-iluminado_23-2149529367.jpg?t=st=1729463839~exp=1729467439~hmac=60b6819273e6d04e927de095357c15cbd4494599318723e17684b0d21693b61c&w=996)', 'min-height': '600px', 'background-size': 'cover'}">
+  </div>
+</div>

@@ -39,6 +39,6 @@ export class TokenGuard implements CanActivate {
       backgroundColor: '#FF0000',
       duration: 3000,
     }).showToast();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   }
 }

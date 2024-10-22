@@ -7,17 +7,22 @@ import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { Auth, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth.service'; // Importa el servicio
+import { AuthService } from '../../services/auth.service'; 
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, FontAwesomeModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   loginForm: FormGroup;
   isGoogleLogin = false;
+  showPassword = false;
+  faEye = faEye;
+  faEyeSlash = faEyeSlash;
 
   constructor(
     private fb: FormBuilder,
@@ -32,6 +37,9 @@ export class LoginComponent {
     });
   }
 
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
   onSubmit() {
     const { email, password } = this.loginForm.value;
     const loginUrl = `${environment.apiUrl}auth/login`;

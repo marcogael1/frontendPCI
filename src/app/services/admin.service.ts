@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { environment } from '../config';
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
 
-  private baseUrl = 'https://pci-backend.vercel.app/admin'; 
+  private baseUrl = `${environment.apiUrl}admin`; 
 
   constructor(private http: HttpClient) {}
 

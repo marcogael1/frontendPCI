@@ -142,7 +142,7 @@ export class RegisterComponent {
   onSubmit() {
     if (this.registerForm.valid && this.recaptchaToken) {  
       const { username, email, password } = this.registerForm.value;
-      const registerUrl = `${environment.apiUrl}auth/register`;
+      const registerUrl = `${environment.apiUrl}register/Sign-up`;
   
       this.http.post<any>(registerUrl, { 
         username, 
@@ -169,12 +169,13 @@ export class RegisterComponent {
               position: 'right',
               backgroundColor: '#4CAF50',
             }).showToast();
-            this.router.navigate(['/login']);
+            this.router.navigate(['/auth/login']);
           }
         },
         error: (err) => {
+          const errorMessage = err.error.message || 'Error en el registro. Por favor, inténtelo de nuevo.';
           Toastify({
-            text: 'Error en el registro. Por favor, inténtelo de nuevo.',
+            text: errorMessage,  
             duration: 3000,
             close: true,
             gravity: 'top',

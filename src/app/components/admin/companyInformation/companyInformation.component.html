@@ -1,0 +1,120 @@
+<div class="flex justify-center items-center mx-auto py-20 px-8">
+  <div class="w-full max-w-6xl bg-white p-8 rounded-lg shadow-lg">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold">Documentos de la Empresa</h2>
+      <div class="flex space-x-4">
+        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          (click)="addNewDocument()">
+          Añadir Nuevo
+        </button>
+
+        <select class="border border-gray-300 rounded px-4 py-2 focus:outline-none" [(ngModel)]="selectedFilter"
+          (change)="filterDocuments()">
+          <option value="all">Todos</option>
+          <option value="vigente">Vigentes</option>
+          <option value="no-vigente">No Vigentes</option>
+          <option value="eliminado">Eliminados</option>
+        </select>
+      </div>
+    </div>
+
+    <table class="table-auto w-full border-collapse">
+      <thead>
+        <tr>
+          <th class="px-4 py-2 text-left font-bold">Título</th>
+          <th class="px-4 py-2 text-left font-bold">Fecha de Creacion</th>
+          <th class="px-4 py-2 text-left font-bold">Versión</th>
+          <th class="px-4 py-2 text-left font-bold">Estado</th>
+          <th class="px-4 py-2 text-left font-bold">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let document of filteredDocuments" class="border-t">
+          <td class="px-4 py-2">{{ document.title }}</td>
+          <td class="px-4 py-2">{{ formatDate(document.effectiveDate) }}</td>
+          <td class="px-4 py-2">{{ document.version }}</td>
+          <td class="px-4 py-2">
+            <span [ngClass]="{
+                'bg-green-100 text-green-700 px-2 py-1 rounded': document.isCurrentVersion && !document.isDeleted,
+                'bg-yellow-100 text-yellow-700 px-2 py-1 rounded': !document.isCurrentVersion && !document.isDeleted,
+                'bg-red-100 text-red-700 px-2 py-1 rounded': document.isDeleted
+              }">
+              {{ document.isDeleted ? 'Eliminado' : document.isCurrentVersion ? 'Vigente' : 'No Vigente' }}
+            </span>
+          </td>
+          <td class="px-4 py-3">
+            <button *ngIf="document.isDeleted" class="bg-gray-500 text-white font-bold py-1 px-2 rounded"
+              (click)="viewDocumentDetails(document)">
+              Ver Detalles
+            </button>
+            <button *ngIf="!document.isDeleted"
+              class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded mr-2"
+              (click)="deleteDocument(document)">
+              Eliminar
+            </button>
+            <button *ngIf="!document.isDeleted"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
+              (click)="editDocument(document)">
+              Modificar
+            </button>
+            <button *ngIf="!document.isCurrentVersion && !document.isDeleted"
+              class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded"
+              (click)="setAsCurrentVersion(document)">
+              Hacer Vigente
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<div *ngIf="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">
+    <h2 class="text-2xl font-bold mb-6">
+      {{ isViewing ? 'Detalles del Documento' : isEditing ? 'Modificar Documento' : 'Añadir Nuevo Documento' }}
+    </h2>
+
+    <form [formGroup]="documentForm" *ngIf="!isViewing" (ngSubmit)="onSubmit()">
+      <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2">Título</label>
+        <input formControlName="title" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none"
+          placeholder="Título del documento" />
+        <div *ngIf="documentForm.get('title')?.invalid && documentForm.get('title')?.touched"
+          class="text-red-500 text-sm">
+          El título es obligatorio.
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2">Contenido</label>
+        <textarea formControlName="content" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none"
+          rows="5" placeholder="Contenido del documento"></textarea>
+        <div *ngIf="documentForm.get('content')?.invalid && documentForm.get('content')?.touched"
+          class="text-red-500 text-sm">
+          El contenido es obligatorio.
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          {{ isEditing ? 'Modificar' : 'Añadir' }}
+        </button>
+        <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          (click)="closeModal()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+    <div *ngIf="isViewing">
+      <p><strong>Título:</strong> {{ currentDocument?.title }}</p>
+      <p><strong>Contenido:</strong> {{ currentDocument?.content }}</p>
+      <p><strong>Fecha de Vigencia:</strong> {{ formatDate(currentDocument?.effectiveDate) }}</p>
+      <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
+        (click)="closeModal()">
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>

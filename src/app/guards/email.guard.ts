@@ -17,7 +17,7 @@ export class EmailGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean> {
     const token = route.queryParamMap.get('token'); 
-    const verifyEmailUrl = `${environment.apiUrl}auth/verify-email`; 
+    const verifyEmailUrl = `${environment.apiUrl}register/verify-email`; 
     console.log('Token capturado desde la URL:', token);
 
     if (!token) {
@@ -40,6 +40,6 @@ export class EmailGuard implements CanActivate {
       backgroundColor: '#FF0000',
       duration: 3000,
     }).showToast();
-    this.router.navigate(['/login']); 
+    this.router.navigate(['/auth/login']); 
   }
 }

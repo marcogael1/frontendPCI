@@ -1,5 +1,5 @@
 export const environment = {
-    apiUrl: 'https://pci-backend.vercel.app/'
+    apiUrl: 'http://localhost:3000/'
 };
 
 

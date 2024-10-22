@@ -1,0 +1,20 @@
+<div class="flex justify-center items-center mx-auto py-4 bg-gray-100 shadow-md menu-content">
+  <nav class="flex space-x-4">
+    <a routerLink="/admin/documents"
+       class="px-4 py-2 text-blue-500 hover:bg-blue-100 rounded">
+      Documentos Regulatorios
+    </a>
+    <a routerLink="/admin/company-profile"
+       class="px-4 py-2 text-blue-500 hover:bg-blue-100 rounded">
+      Perfil de la Empresa
+    </a>
+    <a routerLink="/admin/incidents"
+       class="px-4 py-2 text-blue-500 hover:bg-blue-100 rounded">
+      Incidencias
+    </a>
+  </nav>
+</div>
+
+<div class="content"> 
+  <router-outlet></router-outlet> 
+</div>
