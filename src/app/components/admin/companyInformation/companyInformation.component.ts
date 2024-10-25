@@ -4,6 +4,9 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../config';
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
+
 @Component({
   selector: 'app-companyInformation',
   templateUrl: './companyInformation.component.html',
@@ -41,6 +44,11 @@ export class CompanyInformationComponent implements OnInit {
       },
       (error) => {
         console.error('Error al cargar los documentos:', error);
+        Toastify({
+          text: 'Error al cargar los documentos',
+          duration: 3000,
+          backgroundColor: '#FF0000',
+        }).showToast();
       }
     );
   }
@@ -91,12 +99,21 @@ export class CompanyInformationComponent implements OnInit {
 
     this.http.post(`${this.apiUrl}`, formData).subscribe(
       (response) => {
-        console.log('Documento procesado con éxito');
+        Toastify({
+          text: 'Documento procesado con éxito',
+          duration: 3000,
+          backgroundColor: '#4CAF50',
+        }).showToast();
         this.closeModal();
         this.loadCompanyDocuments();
       },
       (error) => {
         console.error('Error al procesar el documento:', error);
+        Toastify({
+          text: 'Error al procesar el documento',
+          duration: 3000,
+          backgroundColor: '#FF0000',
+        }).showToast();
       }
     );
   }
@@ -105,11 +122,20 @@ export class CompanyInformationComponent implements OnInit {
     if (confirm(`¿Estás seguro de que deseas eliminar el documento: ${document.title}?`)) {
       this.http.delete(`${this.apiUrl}/${document._id}`).subscribe(
         (response) => {
-          console.log('Documento eliminado con éxito');
+          Toastify({
+            text: 'Documento eliminado con éxito',
+            duration: 3000,
+            backgroundColor: '#4CAF50',
+          }).showToast();
           this.loadCompanyDocuments();
         },
         (error) => {
           console.error('Error al eliminar el documento:', error);
+          Toastify({
+            text: 'Error al eliminar el documento',
+            duration: 3000,
+            backgroundColor: '#FF0000',
+          }).showToast();
         }
       );
     }
@@ -120,16 +146,24 @@ export class CompanyInformationComponent implements OnInit {
     return new Date(dateString).toLocaleDateString(undefined, options);
   }
 
-  // Función para establecer un documento como "Vigente"
   setAsCurrentVersion(document: any) {
     if (confirm(`¿Estás seguro de que deseas establecer este documento como la versión vigente?`)) {
       this.http.put(`${this.apiUrl}/set-current/${document._id}`, {}).subscribe(
         (response) => {
-          console.log('Documento establecido como vigente');
-          this.loadCompanyDocuments(); // Volver a cargar los documentos
+          Toastify({
+            text: 'Documento establecido como vigente',
+            duration: 3000,
+            backgroundColor: '#4CAF50',
+          }).showToast();
+          this.loadCompanyDocuments(); 
         },
         (error) => {
           console.error('Error al establecer el documento como vigente:', error);
+          Toastify({
+            text: 'Error al establecer el documento como vigente',
+            duration: 3000,
+            backgroundColor: '#FF0000',
+          }).showToast();
         }
       );
     }

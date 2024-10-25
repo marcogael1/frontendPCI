@@ -1,24 +1,52 @@
 <div class="incidents-container">
-  <!-- Formulario para actualizar el número máximo de intentos de inicio de sesión -->
-  <div class="update-login-attempts-container mb-8 p-4 bg-white rounded-lg shadow-lg">
-    <h2 class="text-2xl font-bold mb-4">Configuración de Intentos de Inicio de Sesión</h2>
-    <form>
-      <label for="maxLoginAttempts" class="block font-bold mb-2">Número máximo de intentos de inicio de sesión</label>
-      <input type="number" [(ngModel)]="maxLoginAttempts" id="maxLoginAttempts" name="maxLoginAttempts"
-        class="border border-gray-300 rounded px-4 py-2 focus:outline-none" />
+  <div class="flex flex-wrap justify-evenly gap-4"> 
+    
+    <div class="update-token-expiry-container mb-8 p-4 bg-white rounded-lg shadow-lg">
+      <h2 class="text-2xl font-bold mb-4">Intentos de Inicio de Sesión</h2>
+      <form>
+        <label for="maxLoginAttempts" class="block font-bold mb-2">Número máximo de intentos de inicio de sesión</label>
+        <input type="number" [(ngModel)]="maxLoginAttempts" id="maxLoginAttempts" name="maxLoginAttempts"
+          class="border border-gray-300 rounded px-4 py-2 focus:outline-none" />
+  
+        <button (click)="updateMaxLoginAttempts()"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+          Actualizar
+        </button>
+      </form>
+    </div>
 
-      <button (click)="updateMaxLoginAttempts()"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
-        Actualizar
+    <div class="update-token-expiry-container mb-8 p-4 bg-white rounded-lg shadow-lg">
+      <h2 class="text-2xl font-bold mb-4">Tiempo de expiración del token</h2>
+      <form>
+        <label for="tokenExpiry" class="block font-bold mb-2">Tiempo de expiración del token (en minutos)</label>
+        <input
+          type="number"
+          [(ngModel)]="verificationTokenExpiry"
+          id="tokenExpiry"
+          class="border border-gray-300 rounded px-4 py-2 focus:outline-none"
+          name="verificationTokenExpiry"
+        />
+        <button (click)="updateTokenExpiry()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+          Actualizar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="w-full md:w-2/3 mx-auto mb-8 p-4 bg-white rounded-lg shadow-lg text-center"> 
+    <h2 class="text-2xl font-bold mb-4">Mensaje de verificación de correo</h2>
+    <form (submit)="updateVerificationEmailMessage()">
+      <label for="emailMessage" class="block font-bold mb-2">Mensaje del correo</label>
+      <textarea [(ngModel)]="verificationEmailMessage" id="emailMessage" rows="4" name="verificationEmailMessage"
+                class="border border-gray-300 rounded px-4 py-2 w-full focus:outline-none"></textarea>
+      <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+        Guardar Cambios
       </button>
     </form>
   </div>
 
-  <!-- Sección de Logs -->
-  <div class="logs-container p-4 bg-white rounded-lg shadow-lg">
+  <div class="w-full md:w-2/3 mx-auto mb-8 p-4 bg-white rounded-lg shadow-lg text-center">
     <h2 class="text-2xl font-bold mb-4">Usuarios Bloqueados</h2>
-
-    <!-- Selector de periodo -->
     <label for="period" class="block mb-2 font-bold">Seleccionar periodo:</label>
     <select [(ngModel)]="selectedPeriod" (change)="filterLogs()"
       class="border border-gray-300 rounded px-4 py-2 focus:outline-none mb-4">
@@ -26,8 +54,6 @@
       <option value="week">Última Semana</option>
       <option value="month">Último Mes</option>
     </select>
-
-    <!-- Lista de logs filtrados -->
     <ul class="list-disc pl-5 mt-4">
       <li *ngFor="let log of filteredLogs">
         {{ log }}

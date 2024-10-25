@@ -40,6 +40,7 @@ export class RegisterComponent {
   showConfirmPassword: boolean = false;
   faEye = faEye;
   faEyeSlash = faEyeSlash;
+  isLoading = false;
 
   passwordRequirements = {
     length: false,
@@ -48,7 +49,7 @@ export class RegisterComponent {
     number: false,
     specialChar: false
   };
-  
+
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
     this.registerForm = this.fb.group({
       username: [
@@ -56,7 +57,7 @@ export class RegisterComponent {
         [
           Validators.required,
           Validators.minLength(4),
-          Validators.pattern('^[a-zA-Z0-9_]+$'), 
+          Validators.pattern('^[a-zA-Z0-9_]+$'),
         ],
       ],
       email: ['', [Validators.required, Validators.email]],
@@ -68,10 +69,10 @@ export class RegisterComponent {
           Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\,.<>/?|])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\,.<>/?|]{8,}$/),
           commonPasswordValidator(),
         ],
-      ],      
+      ],
       confirmPassword: ['', [Validators.required]],
     }, { validator: this.checkPasswords });
-    
+
   }
 
   ngOnInit(): void {
@@ -86,9 +87,9 @@ export class RegisterComponent {
           'callback': (response: string) => this.onCaptchaResolved(response)
         });
       }
-    }, 500); 
+    }, 500);
   }
-  
+
 
   togglePasswordVisibility(field: string) {
     if (field === 'password') {
@@ -99,14 +100,20 @@ export class RegisterComponent {
   }
 
   onCaptchaResolved(token: string) {
-    this.recaptchaToken = token; 
+    this.recaptchaToken = token;
   }
 
   checkPasswords(group: FormGroup) {
     const password = group.get('password')?.value;
-    const confirmPassword = group.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { notSame: true };
+    const confirmPasswordControl = group.get('confirmPassword');
+  
+    if (password === confirmPasswordControl?.value) {
+      confirmPasswordControl?.setErrors(null);
+    } else {
+      confirmPasswordControl?.setErrors({ notSame: true });
+    }
   }
+  
 
   onPasswordInput() {
     const password = this.registerForm.get('password')?.value || '';
@@ -140,43 +147,39 @@ export class RegisterComponent {
   }
 
   onSubmit() {
-    if (this.registerForm.valid && this.recaptchaToken) {  
+    if (this.registerForm.valid && this.recaptchaToken) {
+      this.isLoading = true;
       const { username, email, password } = this.registerForm.value;
       const registerUrl = `${environment.apiUrl}register/Sign-up`;
   
-      this.http.post<any>(registerUrl, { 
-        username, 
-        email, 
-        password, 
-        recaptchaToken: this.recaptchaToken 
+      this.http.post<any>(registerUrl, {
+        username,
+        email,
+        password,
+        recaptchaToken: this.recaptchaToken
       }).subscribe({
         next: (response) => {
-          if (response.message.includes('expuesta')) {
-            Toastify({
-              text: response.message,
-              duration: 5000,
-              close: true,
-              gravity: 'top',
-              position: 'right',
-              backgroundColor: '#FF0000',
-            }).showToast();
-          } else {
-            Toastify({
-              text: 'Correo de verificacion enviado.',
-              duration: 3000,
-              close: true,
-              gravity: 'top',
-              position: 'right',
-              backgroundColor: '#4CAF50',
-            }).showToast();
-            this.router.navigate(['/auth/login']);
-          }
+          this.isLoading = false;
+          Toastify({
+            text: 'Correo de verificación enviado.',
+            duration: 3000,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            backgroundColor: '#4CAF50',
+          }).showToast();
+          this.router.navigate(['/auth/login']);
         },
         error: (err) => {
+          this.isLoading = false;
+          
+          // Reiniciar reCAPTCHA después de un error
+          this.resetRecaptcha();
+  
           const errorMessage = err.error.message || 'Error en el registro. Por favor, inténtelo de nuevo.';
           Toastify({
-            text: errorMessage,  
-            duration: 3000,
+            text: errorMessage,
+            duration: 5000,
             close: true,
             gravity: 'top',
             position: 'right',
@@ -195,6 +198,38 @@ export class RegisterComponent {
       }).showToast();
     }
   }
+  
+  resetRecaptcha() {
+    if (typeof grecaptcha !== 'undefined') {
+      grecaptcha.reset();  
+      this.recaptchaToken = null;  
+    }
+  }
+  
+
+  getErrorMessage(field: string): string {
+    const control = this.registerForm.get(field);
+    if (control?.hasError('required')) {
+      return 'Este campo es obligatorio';
+    }
+    if (control?.hasError('email')) {
+      return 'El email no es válido';
+    }
+    if (control?.hasError('minlength')) {
+      return `Debe tener al menos ${control.errors?.['minlength']?.requiredLength} caracteres`;
+    }
+    if (control?.hasError('pattern')) {
+      return 'El formato es incorrecto';
+    }
+    if (control?.hasError('commonPassword')) {
+      return 'La contraseña es demasiado común';
+    }
+    if (control?.hasError('notSame')) {
+      return 'Las contraseñas no coinciden';
+    }
+    return '';
+  }
+  
   
 
   get f() {

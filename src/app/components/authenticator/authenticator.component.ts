@@ -6,7 +6,7 @@ import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../config';
-import { AuthService } from '../../services/auth.service';
+
 @Component({
   selector: 'app-mfa',
   standalone: true,
@@ -24,7 +24,6 @@ export class MfaComponent {
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService
   ) {
     this.mfaForm = this.fb.group({
       code: ['', [Validators.required, Validators.minLength(6)]],
@@ -47,16 +46,11 @@ export class MfaComponent {
   verifyMfa() {
     const { code } = this.mfaForm.value;
     const verifyUrl = `${environment.apiUrl}auth/verify-mfa`;
-    this.http
-      .post<any>(
-        verifyUrl, 
-        { email: this.email, code, token: this.mfaToken },
-        { withCredentials: true } 
-      )
+
+    this.http.post<any>(verifyUrl, { email: this.email, code, token: this.mfaToken }, { withCredentials: true })
       .subscribe({
         next: (response) => {
           const userType = response.userType;
-          this.authService.setUserType(userType);
 
           Toastify({
             text: 'Inicio de sesión exitoso.',
@@ -64,11 +58,7 @@ export class MfaComponent {
             backgroundColor: '#4CAF50',
           }).showToast();
 
-          if (userType === 'admin') {
-            this.router.navigate(['/admin-dashboard']);
-          } else {
-            this.router.navigate(['/home']);
-          }
+          this.redirectToViewBasedOnRole(userType); 
         },
         error: (err) => {
           Toastify({
@@ -78,5 +68,20 @@ export class MfaComponent {
           }).showToast();
         },
       });
+  }
+  private redirectToViewBasedOnRole(userType: string) {
+    if (userType === 'admin') {
+      this.router.navigate(['/admin/documents']).then(() => {
+        window.location.reload(); // Recarga la página
+      });
+    } else if (userType === 'cliente') {
+      this.router.navigate(['/home']).then(() => {
+        window.location.reload(); // Recarga la página
+      });
+    } else {
+      this.router.navigate(['/auth/login']).then(() => {
+        window.location.reload(); // Recarga la página en caso de error o login fallido
+      });
+    }
   }
 }

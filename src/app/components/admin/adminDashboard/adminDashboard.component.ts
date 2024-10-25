@@ -4,6 +4,8 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../config';
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -22,18 +24,18 @@ export class AdminDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.companyProfileForm = this.fb.group({
       socialMedia: this.fb.group({
-        facebook: ['', [Validators.pattern('https?://.+')]],  // Validación para URL
-        twitter: ['', [Validators.pattern('https?://.+')]],   // Validación para URL
-        linkedin: ['', [Validators.pattern('https?://.+')]],  // Validación para URL
-        instagram: ['', [Validators.pattern('https?://.+')]], // Validación para URL
+        facebook: ['', [Validators.pattern('https?://.+')]],  
+        twitter: ['', [Validators.pattern('https?://.+')]],   
+        linkedin: ['', [Validators.pattern('https?://.+')]], 
+        instagram: ['', [Validators.pattern('https?://.+')]], 
       }),
-      slogan: ['', [Validators.required, Validators.maxLength(100)]], // Requerido, longitud máxima de 100
-      logo: [''],  // Podrías agregar validación personalizada si es necesario
-      pageTitle: ['', [Validators.required, Validators.maxLength(60)]],  // Requerido, longitud máxima de 60
+      slogan: ['', [Validators.required, Validators.maxLength(100)]], 
+      logo: [''],  
+      pageTitle: ['', [Validators.required, Validators.maxLength(60)]],  
       contact: this.fb.group({
-        address: ['', [Validators.required, Validators.maxLength(255)]], // Requerido, longitud máxima de 255
-        email: ['', [Validators.required, Validators.email]],            // Validación de formato de email
-        phone: ['', [Validators.required, Validators.pattern('^\\+?[0-9 ]{7,15}$')]] // Validación de teléfono
+        address: ['', [Validators.required, Validators.maxLength(255)]], 
+        email: ['', [Validators.required, Validators.email]],            
+        phone: ['', [Validators.required, Validators.pattern('^\\+?[0-9 ]{7,15}$')]] 
       })
     });
 
@@ -48,14 +50,26 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   onFileSelected() {
-    // Abre el widget de subida de Cloudinary
     const cloudinaryWidget = (window as any).cloudinary.createUploadWidget({
-      cloudName: 'dbkqz95se',  
-      uploadPreset: 'pcitecnologias'  
+      cloudName: 'dbkqz95se',
+      uploadPreset: 'pcitecnologias',
+      clientAllowedFormats: ['png', 'jpg', 'jpeg', 'gif'], 
+      maxFileSize: 2000000  
     }, (error: any, result: any) => {
       if (!error && result && result.event === "success") {
         this.logoPreview = result.info.secure_url;
         this.companyProfileForm.patchValue({ logo: result.info.secure_url });
+        Toastify({
+          text: "Imagen subida con éxito.",
+          duration: 3000,
+          backgroundColor: "#4CAF50"
+        }).showToast();
+      } else if (error) {
+        Toastify({
+          text: "Error al subir la imagen. Asegúrate de que sea una imagen y que no exceda 2MB.",
+          duration: 3000,
+          backgroundColor: "#FF0000"
+        }).showToast();
       }
     });
     cloudinaryWidget.open();
@@ -63,7 +77,11 @@ export class AdminDashboardComponent implements OnInit {
 
   onSubmit() {
     if (this.companyProfileForm.invalid) {
-      alert('Por favor, completa los campos correctamente.');
+      Toastify({
+        text: "Por favor, completa los campos correctamente.",
+        duration: 3000,
+        backgroundColor: "#FFA500"
+      }).showToast();
       return;
     }
 
@@ -71,20 +89,25 @@ export class AdminDashboardComponent implements OnInit {
 
     this.http.put(`${this.apiUrl}`, updatedProfile).subscribe(
       (response) => {
-        alert('Perfil actualizado con éxito');
+        Toastify({
+          text: "Perfil actualizado con éxito.",
+          duration: 3000,
+          backgroundColor: "#4CAF50"
+        }).showToast();
       },
       (error) => {
         console.error('Error al actualizar el perfil:', error);
-        alert('Hubo un error al actualizar el perfil. Inténtelo de nuevo.');
+        Toastify({
+          text: "Hubo un error al actualizar el perfil. Inténtelo de nuevo.",
+          duration: 3000,
+          backgroundColor: "#FF0000"
+        }).showToast();
       }
     );
   }
 
-  // Métodos para verificar si un campo tiene errores
   getControlError(controlName: string, groupName?: string): boolean {
     const control = groupName ? this.companyProfileForm.get([groupName, controlName]) : this.companyProfileForm.get(controlName);
     return (control?.invalid ?? false) && ((control?.dirty ?? false) || (control?.touched ?? false));
   }
-  
-  
 }

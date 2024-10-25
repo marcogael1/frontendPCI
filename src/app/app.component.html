@@ -1,12 +1,10 @@
 <header class="p-4 shadow-lg bg-white fixed w-full top-0 left-0 z-50">
   <div class="container mx-auto">
     <div class="flex items-center justify-between">
-      <!-- Logo -->
       <div class="flex items-center space-x-4">
         <img [src]="logoUrl || 'assets/default-logo.png'" alt="PCI Tecnología" class="h-10" [ngClass]="{ 'invert-logo': isDarkMode }">
       </div>
 
-      <!-- Barra de búsqueda -->
       <div class="hidden lg:flex flex-grow mx-8 items-center">
         <div class="flex items-center border border-gray-300 rounded-md overflow-hidden w-full">
           <input type="text" placeholder="¿Qué producto buscas el día de hoy?"
@@ -16,8 +14,6 @@
           </button>
         </div>
       </div>
-
-      <!-- Íconos de carrito y perfil -->
       <div class="flex items-center space-x-6">
         <a href="#" class="relative">
           <span class="iconify" data-icon="ic:baseline-shopping-cart" data-inline="false" style="font-size: 2rem;"></span>
@@ -42,8 +38,11 @@
     </div>
 
     <nav class="hidden lg:flex justify-center space-x-8 mt-1">
-      <a routerLink="/auth/login" class="text-pci-blue hover:text-color3 font-medium">Login</a>
-      <a routerLink="/auth/register" class="text-pci-blue hover:text-color3 font-medium">Registrarse</a>
+      <a *ngIf="!isLogged" routerLink="/homeNoSession" class="text-pci-blue hover:text-color3 font-medium">Inicio</a>
+      <a *ngIf="!isLogged" routerLink="/auth/login" class="text-pci-blue hover:text-color3 font-medium">Login</a>
+      <a *ngIf="!isLogged" routerLink="/auth/register" class="text-pci-blue hover:text-color3 font-medium">Registrarse</a>
+      <a *ngIf="isLogged" routerLink="/home" class="text-pci-blue hover:text-color3 font-medium">Inicio</a>
+      <button *ngIf="isLogged" (click)="logout()">Cerrar sesión</button>
     </nav>
 
     <div *ngIf="isMenuOpen" class="lg:hidden mt-4">
@@ -56,8 +55,11 @@
       </div>
 
       <nav class="flex flex-col space-y-2 items-end">
-        <a routerLink="/auth/login" class="text-pci-blue hover:text-color3 font-medium">Login</a>
-        <a routerLink="/auth/register" class="text-pci-blue hover:text-color3 font-medium">Registrarse</a>
+        <a *ngIf="!isLogged" routerLink="/homeNoSession" class="text-pci-blue hover:text-color3 font-medium">Inicio</a>
+        <a *ngIf="!isLogged" routerLink="/auth/login" class="text-pci-blue hover:text-color3 font-medium">Login</a>
+        <a *ngIf="!isLogged" routerLink="/auth/register" class="text-pci-blue hover:text-color3 font-medium">Registrarse</a>
+        <a *ngIf="isLogged" routerLink="/home" class="text-pci-blue hover:text-color3 font-medium">Inicio</a>
+        <button *ngIf="isLogged" (click)="logout()">Cerrar sesión</button>
       </nav>
     </div>
   </div>

@@ -7,7 +7,6 @@ import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { Auth, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth.service'; 
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 @Component({
@@ -23,12 +22,12 @@ export class LoginComponent {
   showPassword = false;
   faEye = faEye;
   faEyeSlash = faEyeSlash;
+  isLoading = false; 
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private auth: Auth,
-    private authService: AuthService,
     private router: Router
   ) {
     this.loginForm = this.fb.group({
@@ -42,12 +41,14 @@ export class LoginComponent {
   }
   onSubmit() {
     const { email, password } = this.loginForm.value;
+    this.isLoading = true;
     const loginUrl = `${environment.apiUrl}auth/login`;
 
     this.isGoogleLogin = false;
     this.http.post<any>(loginUrl, { email, password }, { withCredentials: true })
       .subscribe({
         next: (response) => {
+          this.isLoading = false;
           if (response.mfaRequired) {
             this.router.navigate(['/mfa'], { queryParams: { email, token: response.mfaToken } });
             Toastify({
@@ -56,11 +57,11 @@ export class LoginComponent {
               backgroundColor: '#4CAF50',
             }).showToast();
           } else {
-            this.authService.setUserType(response.userType);
-            this.redirectToHome();
+            this.redirectToViewBasedOnRole(response.userType);
           }
         },
         error: (err) => {
+          this.isLoading = false;
           Toastify({
             text: err.error.message || 'Error en el inicio de sesión.',
             duration: 3000,
@@ -70,14 +71,26 @@ export class LoginComponent {
       });
   }
 
-  private redirectToHome() {
-    const userType = this.authService.getUserType();
-    console.log(userType)
+  private redirectToViewBasedOnRole(userType: string) {
     if (userType === 'admin') {
-      this.router.navigate(['/admin-dashboard']);
+      this.router.navigate(['/admin/documents']).then(() => {
+        window.location.reload(); 
+      });
+    } else if (userType === 'cliente') {
+      this.router.navigate(['/home']).then(() => {
+        window.location.reload(); 
+      });
     } else {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/auth/login']).then(() => {
+        window.location.reload(); 
+      });
     }
+  }
+
+
+  private redirectToHome() {
+    this.router.navigate(['/home']);
+
   }
 
   loginWithGoogle() {

@@ -69,3 +69,22 @@ body.dark-mode form {
 .invert-logo {
   filter: invert(1) hue-rotate(180deg);
 }
+
+/* Ajustar contenedores de productos para el modo oscuro */
+body.dark-mode .product-container {
+  background-color: #333333; /* Fondo oscuro para los productos */
+  border-color: #555555; /* Bordes más oscuros */
+  color: #f1f1f1; /* Texto claro */
+}
+
+body.dark-mode .product-container h3 {
+  color: #f1f1f1; /* Texto claro para los títulos */
+}
+
+body.dark-mode .product-container p {
+  color: #cccccc; /* Texto gris claro para las descripciones */
+}
+
+body.dark-mode .product-container .price {
+  color: #00cfff; /* Color azul claro para el precio */
+}

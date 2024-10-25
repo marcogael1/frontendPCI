@@ -1,23 +1,21 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+
 @Injectable({
-  providedIn: 'root', 
+  providedIn: 'root',
 })
-export class AuthService  {
-  constructor(private router: Router) {}
-  setUserType(type: string): void {
-    localStorage.setItem('userType', type);
-  }
-  getUserType(): string | null {
-    return localStorage.getItem('userType');
+export class AuthService {
+  private isLogged: boolean = false;
+
+  constructor() {}
+
+  isLoggedIn(): boolean | null {
+    return this.isLogged;
   }
 
-  isLoggedIn(): boolean {
-    return !!this.getUserType(); 
+  login(): void {
+    this.isLogged = true;
   }
-
   logout(): void {
-    localStorage.clear(); 
-    this.router.navigate(['/auth/login']);
+    this.isLogged = false;
   }
 }

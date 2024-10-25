@@ -1,0 +1,29 @@
+/* Tooltip de error para mostrar los mensajes de validación */
+.error-tooltip {
+    position: absolute;
+    top: 100%; /* Justo debajo del campo de entrada */
+    left: 0;
+    background-color: #ff0000;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 10;
+    margin-top: 2px;
+  }
+  
+  .error-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #ff0000 transparent;
+  }
+  
+  input.ng-invalid.ng-touched {
+    border-color: #ff0000;
+  }
+  
