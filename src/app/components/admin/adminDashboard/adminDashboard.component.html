@@ -63,9 +63,15 @@
 
       <div class="mb-6">
         <label class="block font-bold mb-2">Logo de la Empresa</label>
-        <button type="button" (click)="onFileSelected()" class="bg-pci-blue text-white py-2 px-4 rounded hover:bg-blue-700">
+        <button type="button" (click)="onFileSelected()"
+          class="bg-pci-blue text-white py-2 px-4 rounded hover:bg-blue-700">
           Subir Logo
         </button>
+        <div class="grid grid-cols-3 gap-2 mt-4">
+          <img *ngFor="let logo of uploadedLogos" [src]="logo" alt="Logo Upload" class="max-h-20 cursor-pointer border"
+            (click)="selectLogo(logo)" [class.border-blue-500]="logo === logoPreview" />
+        </div>
+
         <img *ngIf="logoPreview" [src]="logoPreview" alt="Logo Preview" class="mt-4 max-h-40" />
       </div>
 

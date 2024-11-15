@@ -10,13 +10,14 @@ import { AuthService } from './services/auth.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule, HeaderComponent, CommonModule],
+  imports: [RouterModule, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'PciTecno';
   isLogged = false;
+  isAdmin = false;
   private apiUrl = `${environment.apiUrl}company-profile`;
   isMenuOpen = false;
   isDarkMode = false; 
@@ -89,6 +90,7 @@ export class AppComponent {
       .subscribe({
         next: (response: any) => {
           this.isLogged = true;
+          this.isAdmin = response.role === 'admin';
         },
         error: (err) => {
           this.isLogged = false;

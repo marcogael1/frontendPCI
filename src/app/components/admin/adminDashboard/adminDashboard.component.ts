@@ -17,25 +17,26 @@ import 'toastify-js/src/toastify.css';
 export class AdminDashboardComponent implements OnInit {
   companyProfileForm!: FormGroup;
   logoPreview: string | ArrayBuffer | null | undefined = null;
-  private apiUrl = `${environment.apiUrl}company-profile`; 
+  uploadedLogos: string[] = [];  // Array para almacenar URLs de imágenes subidas
+  private apiUrl = `${environment.apiUrl}company-profile`;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) { }
+  constructor(private fb: FormBuilder, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.companyProfileForm = this.fb.group({
       socialMedia: this.fb.group({
-        facebook: ['', [Validators.pattern('https?://.+')]],  
-        twitter: ['', [Validators.pattern('https?://.+')]],   
-        linkedin: ['', [Validators.pattern('https?://.+')]], 
-        instagram: ['', [Validators.pattern('https?://.+')]], 
+        facebook: ['', [Validators.pattern('https?://.+')]],
+        twitter: ['', [Validators.pattern('https?://.+')]],
+        linkedin: ['', [Validators.pattern('https?://.+')]],
+        instagram: ['', [Validators.pattern('https?://.+')]],
       }),
-      slogan: ['', [Validators.required, Validators.maxLength(100)]], 
-      logo: [''],  
-      pageTitle: ['', [Validators.required, Validators.maxLength(60)]],  
+      slogan: ['', [Validators.required, Validators.maxLength(100)]],
+      logo: [''],
+      pageTitle: ['', [Validators.required, Validators.maxLength(60)]],
       contact: this.fb.group({
-        address: ['', [Validators.required, Validators.maxLength(255)]], 
-        email: ['', [Validators.required, Validators.email]],            
-        phone: ['', [Validators.required, Validators.pattern('^\\+?[0-9 ]{7,15}$')]] 
+        address: ['', [Validators.required, Validators.maxLength(255)]],
+        email: ['', [Validators.required, Validators.email]],
+        phone: ['', [Validators.required, Validators.pattern('^\\+?[0-9 ]{7,15}$')]]
       })
     });
 
@@ -53,12 +54,11 @@ export class AdminDashboardComponent implements OnInit {
     const cloudinaryWidget = (window as any).cloudinary.createUploadWidget({
       cloudName: 'dbkqz95se',
       uploadPreset: 'pcitecnologias',
-      clientAllowedFormats: ['png', 'jpg', 'jpeg', 'gif'], 
-      maxFileSize: 2000000  
+      clientAllowedFormats: ['png', 'jpg', 'jpeg', 'gif'],
+      maxFileSize: 2000000
     }, (error: any, result: any) => {
       if (!error && result && result.event === "success") {
-        this.logoPreview = result.info.secure_url;
-        this.companyProfileForm.patchValue({ logo: result.info.secure_url });
+        this.uploadedLogos.push(result.info.secure_url);  // Agrega la URL al array
         Toastify({
           text: "Imagen subida con éxito.",
           duration: 3000,
@@ -73,6 +73,11 @@ export class AdminDashboardComponent implements OnInit {
       }
     });
     cloudinaryWidget.open();
+  }
+
+  selectLogo(url: string) {
+    this.logoPreview = url;  // Establece la URL seleccionada como la vista previa del logo
+    this.companyProfileForm.patchValue({ logo: url });  // Actualiza el campo 'logo' en el formulario
   }
 
   onSubmit() {

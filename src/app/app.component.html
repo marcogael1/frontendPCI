@@ -39,6 +39,7 @@
 
     <nav class="hidden lg:flex justify-center space-x-8 mt-1">
       <a *ngIf="!isLogged" routerLink="/homeNoSession" class="text-pci-blue hover:text-color3 font-medium">Inicio</a>
+      <a *ngIf="isAdmin" routerLink="/admin/documents" class="text-pci-blue hover:text-color3 font-medium">Admin</a>
       <a *ngIf="!isLogged" routerLink="/auth/login" class="text-pci-blue hover:text-color3 font-medium">Login</a>
       <a *ngIf="!isLogged" routerLink="/auth/register" class="text-pci-blue hover:text-color3 font-medium">Registrarse</a>
       <a *ngIf="isLogged" routerLink="/home" class="text-pci-blue hover:text-color3 font-medium">Inicio</a>
@@ -56,6 +57,7 @@
 
       <nav class="flex flex-col space-y-2 items-end">
         <a *ngIf="!isLogged" routerLink="/homeNoSession" class="text-pci-blue hover:text-color3 font-medium">Inicio</a>
+        <a *ngIf="isAdmin" routerLink="/admin" class="text-pci-blue hover:text-color3 font-medium">Admin</a>
         <a *ngIf="!isLogged" routerLink="/auth/login" class="text-pci-blue hover:text-color3 font-medium">Login</a>
         <a *ngIf="!isLogged" routerLink="/auth/register" class="text-pci-blue hover:text-color3 font-medium">Registrarse</a>
         <a *ngIf="isLogged" routerLink="/home" class="text-pci-blue hover:text-color3 font-medium">Inicio</a>
@@ -94,9 +96,9 @@
     </div>
 
     <div class="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-4 mt-4 lg:mt-0 justify-center">
-      <a href="#" class="text-gray-600 hover:text-pci-blue text-center">Términos de Servicio</a>
-      <a href="#" class="text-gray-600 hover:text-pci-blue text-center">Política de Privacidad</a>
-      <a href="#" class="text-gray-600 hover:text-pci-blue text-center">Contacto</a>
+      <a [routerLink]="['/documentation', 'Términos y condiciones']" class="text-gray-600 hover:text-pci-blue text-center">Términos y condiciones</a>
+      <a [routerLink]="['/documentation', 'Política de privacidad']" class="text-gray-600 hover:text-pci-blue text-center">Política de privacidad</a>
+      <a [routerLink]="['/documentation', 'Deslinde legal']" class="text-gray-600 hover:text-pci-blue text-center">Deslinde legal</a>
     </div>
 
     <div class="text-center mt-4">

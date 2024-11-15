@@ -4,8 +4,16 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../config';
+import { AbstractControl, ValidatorFn } from '@angular/forms';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
+
+function noCodeValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const forbidden = /[<>\/{}()=;]|<script|<\/script>/i.test(control.value);
+    return forbidden ? { 'noCode': { value: control.value } } : null;
+  };
+}
 
 @Component({
   selector: 'app-companyInformation',
@@ -17,7 +25,8 @@ import 'toastify-js/src/toastify.css';
 export class CompanyInformationComponent implements OnInit {
   companyDocuments: any[] = [];
   filteredDocuments: any[] = [];
-  selectedFilter: string = 'all';
+  selectedFilter: string = 'all'; 
+  selectedDocumentType: string = 'all'; 
   isModalOpen = false;
   isEditing = false;
   isViewing = false;
@@ -28,7 +37,7 @@ export class CompanyInformationComponent implements OnInit {
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.documentForm = this.fb.group({
       title: ['', Validators.required],
-      content: ['', Validators.required],
+      content: ['', [Validators.required, noCodeValidator()]],
     });
   }
 
@@ -36,6 +45,7 @@ export class CompanyInformationComponent implements OnInit {
     this.loadCompanyDocuments();
   }
 
+  
   loadCompanyDocuments() {
     this.http.get<any[]>(`${this.apiUrl}`).subscribe(
       (data) => {
@@ -54,20 +64,26 @@ export class CompanyInformationComponent implements OnInit {
   }
 
   filterDocuments() {
+    let filteredByType = this.companyDocuments;
+    if (this.selectedDocumentType !== 'all') {
+      filteredByType = filteredByType.filter(doc => doc.title === this.selectedDocumentType);
+    }
+
     if (this.selectedFilter === 'all') {
-      this.filteredDocuments = this.companyDocuments.filter(doc => !doc.isDeleted);
+      this.filteredDocuments = filteredByType.filter(doc => !doc.isDeleted);
     } else if (this.selectedFilter === 'vigente') {
-      this.filteredDocuments = this.companyDocuments.filter(doc => !doc.isDeleted && doc.isCurrentVersion);
+      this.filteredDocuments = filteredByType.filter(doc => !doc.isDeleted && doc.isCurrentVersion);
     } else if (this.selectedFilter === 'no-vigente') {
-      this.filteredDocuments = this.companyDocuments.filter(doc => !doc.isDeleted && !doc.isCurrentVersion);
+      this.filteredDocuments = filteredByType.filter(doc => !doc.isDeleted && !doc.isCurrentVersion);
     } else if (this.selectedFilter === 'eliminado') {
-      this.filteredDocuments = this.companyDocuments.filter(doc => doc.isDeleted);
+      this.filteredDocuments = filteredByType.filter(doc => doc.isDeleted);
     }
   }
 
   addNewDocument() {
     this.isEditing = false;
     this.documentForm.reset();
+    this.documentForm.get('title')?.enable();
     this.isModalOpen = true;
   }
 
@@ -79,6 +95,7 @@ export class CompanyInformationComponent implements OnInit {
       content: document.content,
       effectiveDate: document.effectiveDate.split('T')[0],
     });
+    this.documentForm.get('title')?.disable();
     this.isModalOpen = true;
   }
 
@@ -95,8 +112,7 @@ export class CompanyInformationComponent implements OnInit {
   }
 
   onSubmit() {
-    const formData = this.documentForm.value;
-
+    const formData = this.documentForm.getRawValue(); 
     this.http.post(`${this.apiUrl}`, formData).subscribe(
       (response) => {
         Toastify({
@@ -117,6 +133,8 @@ export class CompanyInformationComponent implements OnInit {
       }
     );
   }
+  
+  
 
   deleteDocument(document: any) {
     if (confirm(`¿Estás seguro de que deseas eliminar el documento: ${document.title}?`)) {

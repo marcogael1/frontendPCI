@@ -15,6 +15,7 @@ import { AdminMenuComponent } from './components/admin/adminMenu/adminMenu.compo
 import { IncidentsComponent } from './components/admin/incidents/incidents.component';
 import { AuthGuard } from './guards/user-type.guard';
 import { HomeNoSessionComponent } from './components/homeNoSession/home.component';
+import { DocumentationComponent } from './components/documentation/documentation.component';
 
 export const routes: Routes = [
   {
@@ -50,5 +51,6 @@ export const routes: Routes = [
     component: VerifyEmailComponent, 
     canActivate: [EmailGuard] 
   },
+  { path: 'documentation/:title', component: DocumentationComponent },
   { path: '', redirectTo: '/homeNoSession', pathMatch: 'full' }  
 ];

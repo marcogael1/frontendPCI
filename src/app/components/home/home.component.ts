@@ -12,7 +12,7 @@ import { CarouselModule, CarouselComponent, CarouselControlComponent, CarouselIn
 })
 export class HomeComponent {
   ngOnInit() {
-    register();  // Registra los elementos de Swiper
+    register();  
   }
   categories = [
     { name: 'Computadoras' },

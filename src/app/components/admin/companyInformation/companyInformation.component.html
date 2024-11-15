@@ -8,6 +8,14 @@
           Añadir Nuevo
         </button>
 
+        <select class="border border-gray-300 rounded px-4 py-2 focus:outline-none" [(ngModel)]="selectedDocumentType"
+          (change)="filterDocuments()">
+          <option value="all">Todos</option>
+          <option value="Política de privacidad">Política de privacidad</option>
+          <option value="Términos y condiciones">Términos y condiciones</option>
+          <option value="Deslinde legal">Deslinde legal</option>
+        </select>
+
         <select class="border border-gray-300 rounded px-4 py-2 focus:outline-none" [(ngModel)]="selectedFilter"
           (change)="filterDocuments()">
           <option value="all">Todos</option>
@@ -79,18 +87,27 @@
     <form [formGroup]="documentForm" *ngIf="!isViewing" (ngSubmit)="onSubmit()">
       <div class="mb-4">
         <label class="block text-gray-700 font-bold mb-2">Título</label>
-        <input formControlName="title" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none"
-          placeholder="Título del documento" />
+        <select formControlName="title" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none">
+          <option value="" disabled selected>Selecciona el título del documento</option>
+          <option value="Política de privacidad">Política de privacidad</option>
+          <option value="Términos y condiciones">Términos y condiciones</option>
+          <option value="Deslinde legal">Deslinde legal</option>
+        </select>
         <div *ngIf="documentForm.get('title')?.invalid && documentForm.get('title')?.touched"
           class="text-red-500 text-sm">
           El título es obligatorio.
         </div>
       </div>
 
+
       <div class="mb-4">
         <label class="block text-gray-700 font-bold mb-2">Contenido</label>
         <textarea formControlName="content" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none"
           rows="5" placeholder="Contenido del documento"></textarea>
+        <div *ngIf="documentForm.get('content')?.hasError('noCode') && documentForm.get('content')?.touched"
+          class="text-red-500 text-sm">
+          El contenido no cumple con el formato adecuado.
+        </div>
         <div *ngIf="documentForm.get('content')?.invalid && documentForm.get('content')?.touched"
           class="text-red-500 text-sm">
           El contenido es obligatorio.
