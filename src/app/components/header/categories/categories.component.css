@@ -1,0 +1,23 @@
+.relative {
+  position: relative;
+}
+
+.group:hover .group-hover:block {
+  display: block;
+}
+
+.text-blue-600 {
+  color: #1D4ED8;
+}
+
+.text-blue-800 {
+  color: #1E40AF;
+}
+
+.w-64 {
+  width: 16rem;
+}
+
+.ml-64 {
+  margin-left: 16rem;
+}

@@ -1,0 +1,44 @@
+<div class="product-container w-full max-w-5xl bg-white p-8 rounded-lg shadow-lg flex flex-col lg:flex-row gap-8 mx-auto">
+  <div class="w-full lg:w-1/2">
+    <img [src]="product.image_url || 'audis1.jpg'" alt="Imagen del producto principal" class="main-image w-full rounded-lg border" />
+    <div class="flex mt-4 gap-2">
+      <img *ngFor="let img of product.additionalImages" 
+           [src]="img" 
+           alt="Imagen adicional" 
+           class="h-16 w-16 rounded-lg border cursor-pointer hover:ring hover:ring-blue-500" />
+    </div>
+  </div>
+
+  <div class="w-full lg:w-1/2 flex flex-col justify-between">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800">{{ product.combinedNameDescription || 'Bose QuietComfort 25 - Audífonos con cancelación de ruido para Apple, triple negro' }}</h2>
+      <p class="text-sm text-gray-600 mt-1">SKU: {{ product.sku || '9P7K7LA' }}</p>
+      <div class="flex items-center mt-4">
+        <span *ngFor="let star of stars" class="text-yellow-400 text-xl">&#9733;</span>
+      </div>
+      <div class="mt-4">
+        <p class="text-gray-500 line-through">Antes: {{ product.originalPrice || 9678 | currency }}</p>
+        <p class="text-3xl text-pci-blue font-bold mt-4">
+          {{ product.price ? (product.price | number:'1.2-2') : (8299 | currency) }}
+        </p>
+        
+        <p class="text-green-500 text-sm font-medium mt-1">Ahorras: {{ product.discount || 0.14 | percent }}</p>
+      </div>
+
+      <p *ngIf="product.stock > 0" class="mt-4 text-red-500 font-medium">
+        ¡Solo quedan {{ product.stock || 1 }} piezas!
+      </p>
+    </div>
+
+    <button
+      class="mt-6 w-full bg-pci-blue text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      (click)="addToCart()">
+      Agregar al carrito
+    </button>
+
+    <div class="mt-8 border-t pt-4">
+      <h3 class="text-lg font-semibold text-gray-800">Escanea para más detalles</h3>
+      <img [src]="product.qrCodeImage || 'qrcode.png'" alt="Código QR" class="w-32 h-32 mx-auto mt-4" />
+    </div>
+  </div>
+</div>

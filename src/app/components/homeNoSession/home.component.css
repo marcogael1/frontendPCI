@@ -1,38 +1,100 @@
+/* Contenedor de productos */
 .container {
-  max-width: 1200px;
+  margin-top: 100px;  /* Espacio debajo del carrusel */
+}
+.extras {
+  margin-top: 20px;  /* Espacio debajo del carrusel */
 }
 
-.swiper-container {
-  width: 100%;
-  height: 400px;
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: 0 10px; /* Separación entre los productos */
 }
 
-.swiper-slide img {
-  display: block;
-  width: 100%;
+/* Estilo de cada producto */
+.product-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   height: 100%;
-  object-fit: cover;
-}
-
-.grid {
-  margin-top: 20px;
-}
-
-img {
-  transition: transform 0.2s ease-in-out;
-}
-
-img:hover {
-  transform: scale(1.05); /* Efecto de zoom en la imagen */
-}
-
-.border {
   background-color: #ffffff; /* Fondo blanco para las tarjetas */
   border-radius: 8px;
   padding: 1rem;
-  text-align: center;
+  text-align: left;
+  transition: transform 0.3s ease-in-out;
 }
 
-.text-blue-600 {
-  color: #1d4ed8; /* Color azul para el precio */
+/* Título */
+h3 {
+  font-size: 1.125rem; /* Tamaño del título */
+  color: #1F2937; /* Negro */
+}
+
+/* Descripción */
+.product-container {
+  font-size: 0.875rem; /* Tamaño del texto */
+  color: #000000; /* Gris */
+}
+
+/* Estrellas y reseñas */
+.text-yellow-500 {
+  color: #FFD700; /* Amarillo para las estrellas */
+}
+
+/* Modelo del producto */
+.text-xs {
+  font-size: 0.75rem; /* Texto pequeño */
+  color: #6B7280; /* Gris claro */
+}
+
+/* Precio */
+.price {
+  color: #1D4ED8; /* Azul */
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+/* Botón */
+button {
+  background-color: #1D4ED8;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #2563EB; /* Azul más oscuro al pasar el ratón */
+}
+
+/* Hover para la imagen */
+.product-container img {
+  transition: transform 0.2s ease-in-out;
+}
+
+.product-container img:hover {
+  transform: scale(1.05); /* Efecto de zoom */
+}
+
+/* Estilo del banner destacado */
+.highlight-banner {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  background-color: #1d4ed8; /* Azul */
+  color: white; /* Texto blanco */
+  border-radius: 8px; /* Bordes redondeados */
+  padding: 10px; /* Espaciado interno */
+  font-size: 1rem; /* Tamaño del texto */
+}
+
+.iconify {
+  font-size: 1.5rem; /* Tamaño de los íconos */
 }

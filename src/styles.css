@@ -4,7 +4,7 @@
 
 /* Estilos globales (modo claro por defecto) */
 body {
-    font-family: 'Arial', 'Calibri', sans-serif;
+    font-family: 'Arial';
     background-color: #ffffff;
     color: #1e1e1e;
   }
@@ -88,3 +88,6 @@ body.dark-mode .product-container p {
 body.dark-mode .product-container .price {
   color: #00cfff; /* Color azul claro para el precio */
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

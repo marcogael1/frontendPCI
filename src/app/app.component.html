@@ -1,111 +1,37 @@
-<header class="p-4 shadow-lg bg-white fixed w-full top-0 left-0 z-50">
-  <div class="container mx-auto">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center space-x-4">
-        <img [src]="logoUrl || 'assets/default-logo.png'" alt="PCI Tecnología" class="h-10" [ngClass]="{ 'invert-logo': isDarkMode }">
-      </div>
+<app-header></app-header>
 
-      <div class="hidden lg:flex flex-grow mx-8 items-center">
-        <div class="flex items-center border border-gray-300 rounded-md overflow-hidden w-full">
-          <input type="text" placeholder="¿Qué producto buscas el día de hoy?"
-            class="w-full px-4 py-2 focus:outline-none text-sm" />
-          <button class="bg-pci-blue hover:bg-pci-blue text-white px-4 py-2">
-            Buscar
-          </button>
-        </div>
-      </div>
-      <div class="flex items-center space-x-6">
-        <a href="#" class="relative">
-          <span class="iconify" data-icon="ic:baseline-shopping-cart" data-inline="false" style="font-size: 2rem;"></span>
-          <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2">
-            0
-          </span>
-        </a>
-        <a href="#">
-          <span class="iconify" data-icon="ic:baseline-person" data-inline="false" style="font-size: 2rem;"></span>
-        </a>
-
-        <button (click)="toggleDarkMode()" class="focus:outline-none">
-          <span class="iconify" data-icon="line-md:light-dark-loop" data-inline="false" style="font-size: 2rem;"></span>
-        </button>
-
-        <button class="lg:hidden focus:outline-none" (click)="toggleMenu()">
-          <svg class="h-8 w-8 text-pci-blue" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <nav class="hidden lg:flex justify-center space-x-8 mt-1">
-      <a *ngIf="!isLogged" routerLink="/homeNoSession" class="text-pci-blue hover:text-color3 font-medium">Inicio</a>
-      <a *ngIf="isAdmin" routerLink="/admin/documents" class="text-pci-blue hover:text-color3 font-medium">Admin</a>
-      <a *ngIf="!isLogged" routerLink="/auth/login" class="text-pci-blue hover:text-color3 font-medium">Login</a>
-      <a *ngIf="!isLogged" routerLink="/auth/register" class="text-pci-blue hover:text-color3 font-medium">Registrarse</a>
-      <a *ngIf="isLogged" routerLink="/home" class="text-pci-blue hover:text-color3 font-medium">Inicio</a>
-      <button *ngIf="isLogged" (click)="logout()">Cerrar sesión</button>
-    </nav>
-
-    <div *ngIf="isMenuOpen" class="lg:hidden mt-4">
-      <div class="flex items-center border border-gray-300 rounded-md overflow-hidden w-full mb-4">
-        <input type="text" placeholder="¿Qué producto buscas el día de hoy?"
-          class="w-full px-4 py-2 focus:outline-none text-sm" />
-        <button class="bg-pci-blue hover:bg-pci-blue text-white px-4 py-2">
-          Buscar
-        </button>
-      </div>
-
-      <nav class="flex flex-col space-y-2 items-end">
-        <a *ngIf="!isLogged" routerLink="/homeNoSession" class="text-pci-blue hover:text-color3 font-medium">Inicio</a>
-        <a *ngIf="isAdmin" routerLink="/admin" class="text-pci-blue hover:text-color3 font-medium">Admin</a>
-        <a *ngIf="!isLogged" routerLink="/auth/login" class="text-pci-blue hover:text-color3 font-medium">Login</a>
-        <a *ngIf="!isLogged" routerLink="/auth/register" class="text-pci-blue hover:text-color3 font-medium">Registrarse</a>
-        <a *ngIf="isLogged" routerLink="/home" class="text-pci-blue hover:text-color3 font-medium">Inicio</a>
-        <button *ngIf="isLogged" (click)="logout()">Cerrar sesión</button>
-      </nav>
+<div *ngIf="isLoading" class="loading-screen">
+  <div class="loading-content">
+    <img src="PCI2.jpg" alt="Logo" class="loading-logo justify-center">
+    <div class="loading-bar">
+      <div class="loading-progress"></div>
     </div>
   </div>
-</header>
+</div>
 
-
-<div class="container mx-auto mt-14">
+<div class=" mx-auto mt-14">
   <router-outlet></router-outlet>
 </div>
 
-<footer class="bg-white shadow-lg p-6">
-  <div class="container mx-auto">
-    <div class="flex flex-col lg:flex-row justify-between items-center">
-      <div class="flex flex-col items-center lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-4">
-        <img [src]="logoUrl || 'assets/default-logo.png'" alt="PCI Tecnología" class="h-10" [ngClass]="{ 'invert-logo': isDarkMode }">
-        <p class="text-gray-600 text-sm text-center lg:text-left">&copy; 2024 PCI Tecnología. Todos los derechos reservados.</p>
-      </div>
-      <div class="flex flex-wrap justify-center items-center space-x-4 mt-4 lg:mt-0">
-        <a *ngIf="socialMediaLinks.facebook" [href]="socialMediaLinks.facebook" target="_blank" class="text-gray-600 hover:text-pci-blue text-center">
-          <span class="iconify" data-icon="logos:facebook" style="font-size: 24px;"></span>
-        </a>
-        <a *ngIf="socialMediaLinks.twitter" [href]="socialMediaLinks.twitter" target="_blank" class="text-gray-600 hover:text-pci-blue text-center">
-          <span class="iconify" data-icon="logos:twitter" style="font-size: 24px;"></span>
-        </a>
-        <a *ngIf="socialMediaLinks.linkedin" [href]="socialMediaLinks.linkedin" target="_blank" class="text-gray-600 hover:text-pci-blue text-center">
-          <span class="iconify" data-icon="skill-icons:linkedin" style="font-size: 24px;"></span>
-        </a>
-        <a *ngIf="socialMediaLinks.instagram" [href]="socialMediaLinks.instagram" target="_blank" class="text-gray-600 hover:text-pci-blue text-center">
-          <span class="iconify" data-icon="skill-icons:instagram" style="font-size: 24px;"></span>
-        </a>
-      </div>
-    </div>
-
-    <div class="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-4 mt-4 lg:mt-0 justify-center">
-      <a [routerLink]="['/documentation', 'Términos y condiciones']" class="text-gray-600 hover:text-pci-blue text-center">Términos y condiciones</a>
-      <a [routerLink]="['/documentation', 'Política de privacidad']" class="text-gray-600 hover:text-pci-blue text-center">Política de privacidad</a>
-      <a [routerLink]="['/documentation', 'Deslinde legal']" class="text-gray-600 hover:text-pci-blue text-center">Deslinde legal</a>
-    </div>
-
-    <div class="text-center mt-4">
-      <p class="text-gray-500 text-xs">Desarrollado por PCI Tecnología</p>
-    </div>
-  </div>
-</footer>
+<app-footer></app-footer>
 
 
+<div class="fixed bottom-6 right-6 space-y-4 z-50">
+  <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer"
+    class="w-14 h-14 rounded-full border border-gray-300 bg-green-500 flex items-center justify-center shadow-md hover:shadow-lg transition-all">
+    <span class="iconify text-2xl text-white" data-icon="mdi:whatsapp"></span>
+  </a>
+  <button (click)="openChat()"
+    class="w-14 h-14 rounded-full border border-gray-300 bg-white flex items-center justify-center shadow-md hover:shadow-lg transition-all">
+    <span class="iconify text-2xl text-gray-700" data-icon="mdi:chat-outline"></span>
+  </button>
+  <button (click)="editAction()"
+    class="w-14 h-14 rounded-full border border-gray-300 bg-white flex items-center justify-center shadow-md hover:shadow-lg transition-all">
+    <span class="iconify text-2xl text-gray-700" data-icon="mdi:pencil-outline"></span>
+  </button>
+  <button *ngIf="showScrollTop" (click)="scrollToTop()"
+    class="w-14 h-14 rounded-full border border-gray-300 bg-white flex items-center justify-center shadow-md hover:shadow-lg transition-all">
+    <span class="iconify text-2xl text-gray-700" data-icon="mdi:arrow-up"></span>
+  </button>
 
+</div>

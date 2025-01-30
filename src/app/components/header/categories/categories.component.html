@@ -1,0 +1,14 @@
+<div class="relative group">
+  <button class="text-blue-600 hover:text-blue-800">
+    Categorías
+  </button>
+  <div class="absolute left-0 hidden bg-white shadow-md rounded p-4 group-hover:block">
+    <ul class="space-y-2">
+      <li *ngFor="let category of categories"
+          class="text-blue-600 hover:text-blue-800 cursor-pointer"
+          (click)="navigateToCategory(category.name)">
+        {{ category.name }}
+      </li>
+    </ul>
+  </div>
+</div>

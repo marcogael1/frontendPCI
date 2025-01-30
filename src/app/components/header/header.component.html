@@ -1,23 +1,98 @@
-<header class="p-4 shadow-lg">
-  <div class="container mx-auto flex justify-between items-center">
-    <!-- Logo -->
-    <div class="flex items-center space-x-4">
-      <img src="PCI1.png" alt="PCI Tecnología" class="h-10">
+<header class="p-4 shadow-lg bg-white fixed w-full top-0 left-0 z-50">
+  <div class=" mx-auto">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <a [routerLink]="getHomeRoute()" class="flex items-center">
+          <img [src]="logoUrl || 'assets/default-logo.png'" alt="PCI Tecnología" class="h-12 cursor-pointer"
+            [ngClass]="{ 'invert-logo': isDarkMode }">
+        </a>
+      </div>
+      <nav class="ml-6">
+        <app-categories></app-categories>
+      </nav>
+      <a routerLink="/contact" class="ml-6  text-pci-blue hover:underline ">Contacto</a>
+      <p class="ml-6">Servicios</p>
 
+
+      <div class="hidden lg:flex flex-grow mx-8 relative">
+        <div
+          class="flex items-center border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden w-full focus-within:border-blue-500">
+          <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput()"
+            placeholder="¿Qué producto buscas el día de hoy?"
+            class="w-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <ul *ngIf="suggestedProducts.length > 0"
+          class="absolute left-0 right-0 top-full bg-white border border-gray-300 shadow-lg rounded-md z-50 mt-1 max-h-60 overflow-y-auto">
+          <li *ngFor="let product of suggestedProducts" (click)="selectProduct(product)"
+            class="px-4 py-2 hover:bg-gray-200 cursor-pointer flex items-center space-x-4">
+            <img [src]="product.image_url" alt="{{ product.name }}" class="h-20 w-20  rounded-md">
+            <div class="flex-1">
+              <p class="text-sm font-semibold">{{ product.name }}</p>
+              <p class="text-xs text-gray-500">{{ product.description }}</p>
+              <p class="text-sm text-blue-500 font-medium">{{ product.price | currency }}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flex items-center space-x-6">
+        <a href="#" class="relative">
+          <span class="iconify" data-icon="ic:baseline-shopping-cart" data-inline="false"
+            style="font-size: 2rem;"></span>
+          <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2">
+            0
+          </span>
+        </a>
+
+        <div class="relative flex items-center space-x-4 cursor-pointer" (mouseenter)="keepUserMenuOpen()">
+          <span class="iconify text-4xl" data-icon="ic:baseline-person" data-inline="false">
+          </span>
+          <div>
+            <p class="text-sm font-medium text-gray-700">Bienvenido</p>
+            <a *ngIf="!isLogged" class="text-sm text-blue-500 hover:underline">
+              Iniciar sesión/Registrarse
+            </a>
+            <p *ngIf="isLogged" class="text-sm text-gray-500">
+            </p>
+          </div>
+
+          <div *ngIf="isUserMenuOpen "
+            class="absolute right-0 top-12 w-48 bg-white border border-gray-300 shadow-lg rounded-lg z-50 transition-all duration-300 ease-in-out transform"
+            (mouseenter)="keepUserMenuOpen()" (mouseleave)="closeUserMenu()">
+            <ng-container *ngIf="isLogged; else guestMenu">
+              <button (click)="logout()" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
+                Cerrar sesión
+              </button>
+            </ng-container>
+            <ng-template #guestMenu>
+              <a routerLink="/auth/login" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                Iniciar sesión
+              </a>
+              <a routerLink="/auth/register" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                Registrarse
+              </a>
+            </ng-template>
+          </div>
+        </div>
+        <button (click)="toggleDarkMode()" class="focus:outline-none">
+          <span class="iconify" data-icon="line-md:light-dark-loop" data-inline="false" style="font-size: 2rem;"></span>
+        </button>
+      </div>
     </div>
-
-    <!-- Menú de navegación -->
-    <nav class="hidden md:flex space-x-8">
-      <a routerLink="/login" class="text-pci-blue hover:text-blue-200 font-medium">Login</a>
-    </nav>
-
-    <!-- Menú móvil -->
-    <div class="md:hidden">
-      <button class="text-pci-white hover:text-blue-200 focus:outline-none">
-        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
+  </div>
+  <div class=" mx-auto mt-2 -mb-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <div class="breadcrumbs">
+          <div *ngFor="let breadcrumb of breadcrumbs; let i = index">
+            <a (click)="onBreadcrumbClick(i)" [routerLink]="breadcrumb.url"
+              [ngClass]="{'current-breadcrumb': i === breadcrumbs.length - 1, 'previous-breadcrumb': i !== breadcrumbs.length - 1}">
+              {{ breadcrumb.label }}
+            </a>
+            <span *ngIf="breadcrumb !== breadcrumbs[breadcrumbs.length - 1]"> &gt; </span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </header>

@@ -1,0 +1,72 @@
+<!-- category-products.component.html -->
+
+<div class="container mx-auto p-4 mt-40 flex items-start">
+  <!-- Sidebar Filtros -->
+  <aside class="w-1/4 p-1 min-h-[400px] h-full overflow-y-auto ">
+    <h3 class="text-lg font-semibold mb-4">Filtrar por</h3>
+    
+    <!-- Filtro de Precio -->
+    <div class="mb-4">
+      <h4 class="font-medium mb-2">Precio</h4>
+      <div class="flex space-x-2">
+        <input type="number" [(ngModel)]="minPrice" placeholder="Mínimo" class="w-1/2 border border-gray-300 rounded p-2" />
+        <input type="number" [(ngModel)]="maxPrice" placeholder="Máximo" class="w-1/2 border border-gray-300 rounded p-2" />
+      </div>
+    </div>
+
+    <!-- Filtro de Marca -->
+    <div class="mb-4">
+      <h4 class="font-medium mb-2">Marca</h4>
+      <select [(ngModel)]="selectedBrand" class="w-full border border-gray-300 rounded p-2">
+        <option value="">Seleccionar</option>
+        <option *ngFor="let brand of brands" [value]="brand.id">{{ brand.name }}</option>
+      </select>
+    </div>
+
+    <!-- Filtro de Color -->
+    <div class="mb-4">
+      <h4 class="font-medium mb-2">Color</h4>
+      <div class="flex flex-wrap gap-2">
+        <button *ngFor="let color of colors" [style.background-color]="color.hex_code" (click)="selectedColor = color.id" class="w-8 h-8 rounded-full"></button>
+      </div>
+    </div>
+
+    <!-- Botón de aplicar filtros -->
+    <button (click)="loadProducts()" class="mt-2 bg-blue-600 text-white py-1 px-3 rounded-full text-sm hover:bg-blue-700">Aplicar</button>
+
+    <!-- Indicador de filtros seleccionados -->
+    <div class="mb-4 mt-4">
+      <h4 class="font-medium mb-2">Filtros seleccionados</h4>
+      <div class="text-sm text-gray-700 space-y-1">
+        <span *ngIf="minPrice && maxPrice" class="inline-block bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Precio: ${{ minPrice }} - ${{ maxPrice }}</span>
+        <span *ngIf="selectedBrand" class="inline-block bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Marca: {{ getSelectedBrandName() }}</span>
+        <span *ngIf="selectedColor" class="inline-block bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Color: {{ getSelectedColorName() }}</span>
+      </div>
+      <button (click)="clearFilters()" class="mt-2 bg-red-500 text-white py-1 px-3 rounded-full text-sm hover:bg-red-600">Limpiar filtros</button>
+    </div>
+  </aside>
+
+  <!-- Contenido de productos -->
+  <div class="w-4/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div *ngFor="let product of products" 
+      class="border border-gray-300 dark:border-gray-700 p-4 shadow-md rounded-lg transition-transform transform hover:scale-105 cursor-pointer"
+      [routerLink]="['/product', product.name]">
+      <div class="h-48 flex justify-center mb-4">
+        <img [src]="product.image_url" alt="{{ product.name }}" class="object-contain h-full w-full rounded transition-transform transform hover:scale-105">
+      </div>
+      <div class="flex items-center justify-center mb-2">
+        <span class="text-yellow-500 text-lg">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+        <span class="text-gray-500 text-sm ml-2">(1575 opiniones)</span>
+      </div>
+      <h3 class="mb-2 text-lg font-semibold text-gray-900">{{ product.name }}</h3>
+      <p class="text-sm text-gray-600 mb-4">{{ product.description }}</p>
+      <div class="flex items-center justify-between">
+        <button class="flex items-center bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700">
+          <span class="iconify" data-icon="mdi:cart-outline" style="font-size: 1rem;"></span>
+          <span class="ml-1">Agregar</span>
+        </button>
+        <p class="text-xl font-semibold text-blue-600">${{ product.price | number:'1.2-2' }}</p>
+      </div>
+    </div>
+  </div>
+</div>

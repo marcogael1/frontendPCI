@@ -1,0 +1,15 @@
+.product-container {
+    margin-top: 120px;
+    margin-bottom: 50px;
+}
+
+.main-image {
+    width: 50%;
+    /* Cambia este valor según lo necesites */
+    max-width: 400px;
+    /* Establece un tamaño máximo opcional */
+    height: auto;
+    /* Mantén la proporción de la imagen */
+    margin: 0 auto;
+    /* Centra la imagen horizontalmente */
+}

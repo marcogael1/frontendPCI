@@ -3,32 +3,106 @@
     <div class="hidden lg:block col-span-1 bg-white shadow-md p-4 rounded">
       <h2 class="text-xl font-semibold mb-4">Categorías</h2>
       <ul class="space-y-2">
-        <li *ngFor="let category of categories" class="text-blue-600 hover:text-blue-800">
+        <li *ngFor="let category of categories"
+          class="flex items-center text-blue-600 hover:text-blue-800 cursor-pointer">
           {{ category.name }}
         </li>
       </ul>
     </div>
-    
+
+    <!-- Productos -->
     <div class="col-span-1 lg:col-span-3">
-      <swiper-container pagination="true" speed="1000" loop="true" navigation="true" autoplay-delay="2500" autoplay-disable-on-interaction="false">
+      <swiper-container pagination="true" speed="1000" loop="true" navigation="true" autoplay-delay="2500"
+        autoplay-disable-on-interaction="false">
         <swiper-slide *ngFor="let slide of slides">
-          <img [src]="slide.imageUrl" alt="Slide" class="w-full h-64 object-cover">
+          <img [src]="slide.imageUrl" alt="Slide" class="w-full h-64 object-cover rounded-lg shadow-md">
         </swiper-slide>
-      </swiper-container>      
+      </swiper-container>
 
-      <h2 class="text-2xl font-bold mb-4">Productos Destacados</h2>
-      <h2 class="text-2xl font-bold mb-4">Ejemplo de home con sesion</h2>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div *ngFor="let product of products" class="product-container border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg p-4">
-          <div class="h-48 flex justify-center">
-            <img [src]="product.imageUrl" alt="{{ product.name }}" class="object-contain h-full w-full rounded mb-4">
-          </div>
-          <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">{{ product.name }}</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">{{ product.description }}</p>
-          <p class="text-xl font-semibold text-blue-600 dark:text-blue-400 price">Precio: ${{ product.price | number:'1.2-2' }}</p>
-        </div>
+      <div class="highlight-banner bg-blue-600 text-white rounded-md flex p-2 mb-4 mt-6">
+        <span class="iconify mr-2" data-icon="mdi:sparkles" style="font-size: 1.5rem;"></span>
+        <h2 class="text-base font-bold">Destacados del día, ¡no los dejes pasar!</h2>
+        <span class="iconify ml-2" data-icon="mdi:sparkles" style="font-size: 1.5rem;"></span>
       </div>
+
+      <swiper-container [slidesPerView]="3" spaceBetween="10" loop="true" navigation="true" pagination="false"   [breakpoints]="breakpoints"
+        class="swiper-container">
+
+        <swiper-slide *ngFor="let product of products">
+          <div
+            class="product-container flex flex-col border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg p-4">
+
+            <div class="h-48 flex justify-center mb-4">
+              <img [src]="product.imageUrl" alt="{{ product.name }}"
+                class="object-contain h-full w-full rounded transition-transform transform hover:scale-105">
+            </div>
+            <div class="flex items-center justify-center mb-2">
+              <div class="flex items-center">
+                <span class="text-yellow-500 text-lg">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+                <span class="text-gray-500 text-sm ml-2">(1575 opiniones)</span>
+              </div>
+            </div>
+            <h3 class="mb-2 text-lg font-semibold text-gray-900">{{ product.name }}</h3>
+            <p class="text-sm text-gray-600 mb-4">{{ product.description }}</p>
+            <p class="text-xs text-gray-500 text-left mb-4">Modelo: {{ product.id }}</p>
+            <div class="flex items-center justify-between">
+              <button class="flex items-center bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700">
+                <span class="iconify" data-icon="mdi:cart-outline" style="font-size: 1.5rem;"></span>
+                <span class="ml-2">Agregar</span>
+              </button>
+              <p class="text-xl font-semibold text-blue-600">${{ product.price | number:'1.2-2' }}</p>
+            </div>
+          </div>
+        </swiper-slide>
+
+      </swiper-container>
     </div>
   </div>
+  <div class="extras">
+    <!-- Carrusel de Categorías destacadas -->
+    <h2 class="text-xl font-bold mb-4">Categorías destacadas</h2>
+    <swiper-container
+      [slidesPerView]="4"
+      [spaceBetween]="10"
+      [loop]="true"
+      [navigation]="true"
+      [pagination]="false"
+      [breakpoints]="breakpoints2"
+      class="swiper-container"
+    >
+      <swiper-slide *ngFor="let category of featuredCategories">
+        <div class="category-item text-center">
+          <img [src]="category.imageUrl" [alt]="category.name"
+            class="w-full h-32 object-contain rounded-lg shadow-md mb-2">
+          <p class="text-gray-800 font-medium">{{ category.name }}</p>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+  
+    <!-- Carrusel de Productos destacados -->
+    <h2 class="text-xl font-bold mb-4 mt-8">Productos destacados</h2>
+    <swiper-container
+      [slidesPerView]="4"
+      [spaceBetween]="10"
+      [loop]="true"
+      [navigation]="true"
+      [pagination]="false"
+      [breakpoints]="breakpoints2"
+      class="swiper-container"
+    >
+      <swiper-slide *ngFor="let product of featuredProducts">
+        <div class="product-item text-center">
+          <img [src]="product.imageUrl" [alt]="product.name"
+            class="w-full h-32 object-contain rounded-lg shadow-md mb-2">
+          <p class="text-gray-800 font-medium">{{ product.name }}</p>
+          <div class="flex items-center justify-center mt-2 text-yellow-500">
+            &#9733;&#9733;&#9733;&#9733;&#9734;
+            <span class="text-gray-500 text-sm ml-2">({{ product.reviews }} opiniones)</span>
+          </div>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+  </div>
+  
+
 </div>

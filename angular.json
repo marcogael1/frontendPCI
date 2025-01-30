@@ -64,7 +64,11 @@
               "buildTarget": "PciTecno:build:production"
             },
             "development": {
-              "buildTarget": "PciTecno:build:development"
+              "buildTarget": "PciTecno:build:development",
+              "ssl": true,
+              "sslCert": "ssl/PCITecnologia.pem",
+              "sslKey": "ssl/PCITecnologia-key.pem",
+              "host": "PCITecnologia"
             }
           },
           "defaultConfiguration": "development"
@@ -87,8 +91,9 @@
               }
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.css",
-              "~@coreui/coreui/dist/css/coreui.min.css"       
+              "~@coreui/coreui/dist/css/coreui.min.css"
             ],
             "scripts": []
           }

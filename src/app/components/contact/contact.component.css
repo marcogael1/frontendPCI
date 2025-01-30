@@ -1,0 +1,67 @@
+.contact-container {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .maps {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .map {
+    width: 45%;
+    height: 300px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+  }
+  
+  .street-view {
+    width: 100%;
+    height: 300px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .contact-form button {
+    padding: 10px;
+    border: none;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .contact-form button:hover {
+    background: #0056b3;
+  }
+  
+  .social-icons a {
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  .social-icons a:hover {
+    color: #0056b3;
+  }
+  

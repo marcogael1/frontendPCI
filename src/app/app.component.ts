@@ -1,100 +1,56 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError, RouterModule } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
+import { CategoriesComponent } from './components/header/categories/categories.component';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
-import { Router } from '@angular/router';
 import { environment } from './config';
-import { HttpClient } from '@angular/common/http';
 import { AuthService } from './services/auth.service';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { of, filter } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { FooterComponent } from './components/header/footer/footer.component';
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, FormsModule, BreadcrumbModule, FooterComponent, HeaderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'PciTecno';
-  isLogged = false;
-  isAdmin = false;
-  private apiUrl = `${environment.apiUrl}company-profile`;
-  isMenuOpen = false;
-  isDarkMode = false; 
-  socialMediaLinks: any = {};
-  logoUrl: string | null = null;
-  constructor(private titleService: Title, private http: HttpClient, private router: Router, public authService: AuthService) { }
+  showScrollTop = false;
+  isLoading = false; 
 
-  ngOnInit() {
-    this.checkSession();
-    this.loadCompanyProfile();
-    this.checkDarkMode();
-  }
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
-  checkDarkMode() {
-    const darkModeSetting = localStorage.getItem('darkMode');
-    if (darkModeSetting === 'true') {
-      this.isDarkMode = true;
-      document.body.classList.add('dark-mode');
-    } else {
-      this.isDarkMode = false;
-      document.body.classList.remove('dark-mode');
-    }
-  }
-  toggleDarkMode() {
-    this.isDarkMode = !this.isDarkMode;
-    if (this.isDarkMode) {
-      document.body.classList.add('dark-mode');
-      localStorage.setItem('darkMode', 'true'); 
-    } else {
-      document.body.classList.remove('dark-mode');
-      localStorage.setItem('darkMode', 'false'); 
-    }
-  }
-
-  loadCompanyProfile() {
-    this.http.get(`${this.apiUrl}`).subscribe((profile: any) => {
-      if (profile && profile.pageTitle) {
-        this.titleService.setTitle(profile.pageTitle);
-      } else {
-        this.titleService.setTitle('PCI Tecnología');
+  constructor(public authService: AuthService, private router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.isLoading = true;  // Muestra la animación cuando cambia la ruta
+      } else if (event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
+        setTimeout(() => {
+          this.isLoading = false; // Oculta la animación después de un pequeño delay
+        }, 1000);
       }
-      if (profile && profile.socialMedia) {
-        this.socialMediaLinks = profile.socialMedia;
-      }
-      if (profile && profile.logo) {
-        this.logoUrl = profile.logo;
-      }
-    }, (error) => {
-      console.error('Error al cargar el perfil de la empresa', error);
-      this.titleService.setTitle('PCI Tecnología');
     });
   }
 
-  logout() {
-    this.http.post(`${environment.apiUrl}auth/logout`, {}, { withCredentials: true })
-      .subscribe(
-        () => {
-          window.location.reload(); 
-        },
-        (error) => {
-          console.error('Error al cerrar sesión:', error);
-        }
-      );
+  @HostListener('window:scroll', [])
+  onScroll(): void {
+    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    this.showScrollTop = scrollPosition > 100;
   }
-  
-  checkSession() {
-    this.http.get(`${environment.apiUrl}auth/validate-session`, { withCredentials: true })
-      .subscribe({
-        next: (response: any) => {
-          this.isLogged = true;
-          this.isAdmin = response.role === 'admin';
-        },
-        error: (err) => {
-          this.isLogged = false;
-        }
-      });
+
+  scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  openChat(): void {
+    alert('¡Aquí se abrirá el chat! (Funcionalidad por implementar)');
+  }
+
+  editAction(): void {
+    console.log('¡Acción de editar activada!');
+  }
+
 }
